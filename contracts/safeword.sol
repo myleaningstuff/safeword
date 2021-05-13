@@ -1,4 +1,9 @@
+
 /**
+ * 
+   #SAFEWORD FORKS :
+
+   #SAFEMOON
   
    #BEE
    
@@ -711,18 +716,18 @@ contract SafeWord is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
-    string private _name = "SafeWord";
+    string private _name = "Safeword";
     string private _symbol = "SAFEWORD";
     uint8 private _decimals = 9;
     
-    uint256 public _taxFee = 5;
+    uint256 public _taxFee = 3;
     uint256 private _previousTaxFee = _taxFee;
     
-    uint256 public _liquidityFee = 5;
+    uint256 public _liquidityFee = 3;
     uint256 private _previousLiquidityFee = _liquidityFee;
 
-    IUniswapV2Router02 public uniswapV2Router;
-    address public uniswapV2Pair;
+    IUniswapV2Router02 public immutable uniswapV2Router;
+    address public immutable uniswapV2Pair;
     
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
@@ -746,27 +751,19 @@ contract SafeWord is Context, IERC20, Ownable {
     
     constructor () public {
         _rOwned[_msgSender()] = _rTotal;
-        // testnet 0x5b26de62622b809fab42574623c66e12e23e3f67
-        // IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0xa73f27c699f6ca769ADF840A3F65831f64000BE1);
+        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
          // Create a uniswap pair for this new token
-        // uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
-        //     .createPair(address(this), _uniswapV2Router.WETH());
+        uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
+            .createPair(address(this), _uniswapV2Router.WETH());
 
-        // // set the rest of the contract variables
-        // uniswapV2Router = _uniswapV2Router;
+        // set the rest of the contract variables
+        uniswapV2Router = _uniswapV2Router;
         
         //exclude owner and this contract from fee
         _isExcludedFromFee[owner()] = true;
         _isExcludedFromFee[address(this)] = true;
         
         emit Transfer(address(0), _msgSender(), _tTotal);
-    }
-
-    function setUniswapRouter(address _address) external onlyOwner() {
-        uniswapV2Router = IUniswapV2Router02(_address);
-         // Create a uniswap pair for this new token
-        uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory())
-            .createPair(address(this), uniswapV2Router.WETH());
     }
 
     function name() public view returns (string memory) {

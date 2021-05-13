@@ -13,5 +13,9 @@ Find out the uniswap router address in your network.
 
 ## Contract address in bsc testnet
 
-https://testnet.bscscan.com/address/0xe851a02d4A5B7663E96e5E4589850205d5242425
+https://bscscan.com/address/0xe8eebb090d259baf31191d14b24527f3a52f7774
+
+## Where to buy:
+https://exchange.pancakeswap.finance/#/swap?outputCurrency=0xe8eebb090d259baf31191d14b24527f3a52f7774
+
 

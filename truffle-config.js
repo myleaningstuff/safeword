@@ -26,7 +26,13 @@
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 // const fs = require('fs');
-const MNEMONIC = process.env.BSC_MNEMONIC;
+const NODE_API_KEY = process.env.INFURA_KEY || process.env.ALCHEMY_KEY;
+const MNEMONIC_BSC = process.env.BSC_MNEMONIC;
+const isInfura = !!process.env.INFURA_KEY;
+const rinkebyNodeUrl = isInfura
+  ? "https://rinkeby.infura.io/v3/" + NODE_API_KEY
+  : "https://eth-rinkeby.alchemyapi.io/v2/" + NODE_API_KEY;
+const MNEMONIC_ETH = process.env.MNEMONIC
 
 module.exports = {
   /**
@@ -46,18 +52,27 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(MNEMONIC, "https://data-seed-prebsc-1-s1.binance.org:8545"),
+      provider: () => new HDWalletProvider(process.env.MNEMONIC_SAFEWORD, `https://data-seed-prebsc-1-s1.binance.org:8545`),
       network_id: 97,
       confirmations: 2,
       timeoutBlocks: 200,
+      skipDryRun: false
+    },
+    rinkeby: {
+      provider: () => new HDWalletProvider(MNEMONIC_ETH, rinkebyNodeUrl, 0, 3),
+      gas: 10000000,
+      gasPrice: 4000000000, // 1000000000 == 1 gwei
+      network_id: 4,
+      confirmations: 2,
       skipDryRun: true
     },
     bsc: {
-      provider: () => new HDWalletProvider(MNEMONIC, "https://bsc-dataseed1.binance.org"),
+      provider: () => new HDWalletProvider(process.env.MNEMONIC_SAFEWORD, `https://bsc-dataseed1.binance.org`),
       network_id: 56,
       confirmations: 2,
+      gasPrice: 8000000000, // 1000000000 == 1 gwei
       timeoutBlocks: 200,
-      skipDryRun: true
+      skipDryRun: false
     },
   },
 
